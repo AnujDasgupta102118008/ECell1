@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="  https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" type="image/png" href="../favicon.png" />
+	<script>
+	
+	function deleteChild() { 
+        var e = document.getElementById("showdiv"); 
+        var child = e.lastElementChild;  
+        while (child) { 
+            e.removeChild(child); 
+            child = e.lastElementChild; 
+        } 
+    } 
+	function showcode(id){
+	console.log("init");
+	 //deleteChild();
+	 document.getElementById("showdiv").innerHTML="";
+	console.log(id);
+	var data;
+	 $.ajax({
+                url: "http://localhost:3000/getfile",
+                type: "GET",
+                data: {id:id},
+                success: function (result, xhr) {
+                data = result;
+                console.log(result);
+				res=document.createTextNode(result);
+                document.getElementById("showdiv").append(res);
+                        }
+                    });
+	}
+	</script>
+</head>
+<body>
+
+    <nav class="navbar bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Easy Share</a>
+		<form method="GET" action="/back">
+		<button type="submit" class="btn btn-primary">Back</button>
+		</form>
+		<form method="GET" action="/logout">
+		<button type="submit" class="btn btn-danger">Logout</button>
+		</form>
+    </nav>
+
+    <div class="container-fluid">
+        
+            <div class="card col-md-4 offset-md-4">
+                <form method="get" action="/viewuser">
+                    <input type="text" placeholder="Username" name="user" required />
+                    <button type="submit" class="btn btn-primary">Search User</button>
+                </form>
+            </div>
+
+            <div class="card col-md-4 offset-md-4">
+               <ol>
+					<% files.forEach(function(fn){%>
+						<li><%= fn.Filename %><br />
+						<button id="<%=fn.Filename%>" onclick="showcode(this.id)">View</button></li>
+						<%});%>
+				</ol>
+				<%= message %>
+            </div>
+			<div class="card col-md-4 offset-md-4" id="showdiv">
+			</div>
+        </div>
+
+    
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+</html>
